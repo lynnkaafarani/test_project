@@ -15,6 +15,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       body: Column(mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            //jjjk
         Row(
           children: [
             SizedBox(width:80),
