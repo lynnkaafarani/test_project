@@ -4,6 +4,7 @@ import 'package:test2/screens/sign_up.dart';
 import 'package:test2/widgets/social_icon.dart';
 
 import '../constants/color_constants.dart';
+import 'home_pageproject.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -212,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Text("Log In", style: TextStyle(color:Colors.white)),
                                 ]),
                                 onPressed: () {Navigator.push(context,
-                                       MaterialPageRoute(builder: (context) => HomePageproject()));
+                                       MaterialPageRoute(builder: (context) =>HomePageproject()));
                                   if (formKey.currentState!.validate()) {
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(

@@ -62,7 +62,7 @@ flutter:
   assets:
     - photo/hi.jpg
     - photo/logo.jpeg
-    - insta/facebook.png
+    - insta/mrad.png
     - photo/instagram.png
     - insta/search.png
 
