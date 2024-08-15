@@ -36,7 +36,7 @@ class _State extends State<HomePageproject> {
 
             )
           ),
-          SizedBox(width: 44,)
+          SizedBox(width: 24,)
 
         ],
       ),
