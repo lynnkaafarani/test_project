@@ -35,7 +35,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-
+  weather: ^3.1.1
+  intl_phone_field : ^3.2.0
+  calendar_date_picker2: ^1.1.5
+  shared_preferences: ^2.3.2
+  intl:
+  path_provider:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -62,9 +67,12 @@ flutter:
   assets:
     - photo/hi.jpg
     - photo/logo.jpeg
-    - insta/facebook.png
+    - insta/mrad.png
     - photo/instagram.png
     - insta/search.png
+    - insta/homepagephoto.jpeg
+    - insta/one.jpeg
+    - insta/avatar.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -77,10 +85,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Bakbak One
+      fonts:
+        - asset: fonts/bakbak.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

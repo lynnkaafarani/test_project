@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test2/screens/sign_up.dart';
-import 'package:test2/widgets/social_icon.dart';
+import 'package:test2/constants/cst.dart';
+import 'package:test2/constants/json_fct.dart';
+
+
+import '../constants/color_constants.dart';
+import 'default_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,6 +21,14 @@ class _LoginPageState extends State<LoginPage> {
   bool val = true;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  List<JsnFct> users = [];
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,22 +38,26 @@ class _LoginPageState extends State<LoginPage> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Image(
-                image: AssetImage('photo/logo.jpeg'),
+                image: const AssetImage('photo/logo.jpeg'),
                 width: MediaQuery.of(context).size.width,
                 height: 200,
                 fit: BoxFit.cover,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Color(0xff00658e),
+                child: Card(
+                  surfaceTintColor: Colors.white,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    side: BorderSide(
+                      color: mainTextColor, // border color
+                      width: 2.0, // border thickness
+                    ),
                   ),
                   child: Form(
                     key: formKey,
-                    autovalidateMode:
-                    AutovalidateMode.onUserInteraction,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -50,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             'Login',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: mainTextColor,
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
@@ -59,89 +75,89 @@ class _LoginPageState extends State<LoginPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Icon(
-                              Icons.person,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              "Username",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: TextFormField(
-                                validator: (val) {
-                                  if (usernameController.text.isEmpty) {
-                                    return "Empty fields";
-                                  }
-                                },
-                                controller: usernameController,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white)
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: TextFormField(
+                                  validator: (val) {
+                                    if (usernameController.text.isEmpty) {
+                                      return "Empty fields";
+                                    }
+                                    return null;
+                                  },
+                                  controller: usernameController,
+                                  style: TextStyle(
+                                    color: mainTextColor,
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
-                                  errorBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.orange)),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                      borderSide:
-                                      BorderSide(color: Colors.orange)),
-                                  errorStyle:TextStyle(color: Colors.orange),
+                                  decoration: InputDecoration(
+                                    label: const Text("Username"),
+                                    labelStyle: TextStyle(color: mainTextColor),
+                                    prefixIcon: Icon(
+                                      Icons.person,
+                                      color: mainTextColor,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: mainTextColor)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: mainTextColor)),
+                                    errorBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff0caba7))),
+                                    focusedErrorBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff0caba7))),
+                                    errorStyle:
+                                        const TextStyle(color: Color(0xff0caba7)),
+                                  ),
                                 ),
                               ),
                             )
                           ],
                         ),
-                        SizedBox(height: 16,),
+                        const SizedBox(
+                          height: 16,
+                        ),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Icon(
-                                Icons.lock,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                "Password",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              SizedBox(
-                                  width: 200,
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
                                   child: TextFormField(
                                     validator: (val) {
                                       if (passwordController.text.isEmpty) {
                                         return "Empty fields";
-
-                                      }
-                                      else if(passwordController.text.length<7){
-                                        return"weak password";
+                                      } else if (passwordController
+                                              .text.length <
+                                          7) {
+                                        return "weak password";
                                       }
                                     },
-
-
                                     controller: passwordController,
                                     obscureText: eye,
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: mainTextColor),
                                     decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.lock,
+                                          color: mainTextColor),
+                                      label: const Text("Password"),
+                                      labelStyle:
+                                          TextStyle(color: mainTextColor),
                                       enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.white)
-                                      ),
+                                          borderSide:
+                                              BorderSide(color: mainTextColor)),
                                       focusedBorder: OutlineInputBorder(
                                           borderSide:
-                                          BorderSide(color: Colors.white)),
-                                      errorBorder: OutlineInputBorder(
-                                          borderSide:
-                                          BorderSide(color: Colors.orange)),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                          borderSide:
-                                          BorderSide(color: Colors.orange)),
-                                      errorStyle: TextStyle(color: Colors.orange),
-
+                                              BorderSide(color: mainTextColor)),
+                                      errorBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff0caba7))),
+                                      focusedErrorBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff0caba7))),
+                                      errorStyle:
+                                          const TextStyle(color: Color(0xff0caba7)),
                                       suffixIcon: GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -150,25 +166,34 @@ class _LoginPageState extends State<LoginPage> {
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye,
-                                          color: Colors.white,
+                                          color: mainTextColor,
                                         ),
                                       ),
                                     ),
-                                  )),
+                                  ),
+                                ),
+                              ),
                             ]),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 32.0,vertical: 8,),
-                          child: Divider(thickness:1,color: Colors.white,),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(
+                        //     horizontal: 32.0,
+                        //     vertical: 8,
+                        //   ),
+                        //   child: Divider(
+                        //     thickness: 1,
+                        //     color: mainTextColor,
+                        //   ),
+                        // ),
                         Row(children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Checkbox(
-                              checkColor: Color(0xff00658e),
-                              focusColor: Colors.white,
-                              activeColor: Colors.white,
-                              side: BorderSide(color: Colors.white, width: 1.5),
+                              checkColor: Colors.white,
+                              focusColor: mainTextColor,
+                              activeColor: mainTextColor,
+                              side:
+                                  BorderSide(color: mainTextColor, width: 1.5),
                               value: val,
                               onChanged: (value) {
                                 setState(() {
@@ -178,12 +203,12 @@ class _LoginPageState extends State<LoginPage> {
                           //SizedBox(width: 10,),
 
                           Text('Remember me ',
-                              style: TextStyle(color: Colors.white)),
-                          SizedBox(
+                              style: TextStyle(color: mainTextColor)),
+                          const SizedBox(
                             width: 50,
                           ),
                           Text("forgot password?",
-                              style: TextStyle(color: Colors.white)),
+                              style: TextStyle(color: mainTextColor)),
                         ]),
                         SizedBox(
                           width: 188,
@@ -191,18 +216,40 @@ class _LoginPageState extends State<LoginPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: mainTextColor,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8))),
-                                child: Row(children: [
-                                  Icon(Icons.login),
-                                  Text("Log In"),
+                                        borderRadius:
+                                            BorderRadius.circular(8))),
+                                child: const Row(children: [
+                                  Icon(Icons.login, color: Colors.white),
+                                  Text("Log In",
+                                      style: TextStyle(color: Colors.white)),
                                 ]),
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
+                                    for (JsnFct user in users) {
+
+                                      if (usernameController.text ==
+                                              user.email &&
+                                          passwordController.text ==
+                                              user.password) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const DefaultPage(),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                    }
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Invalid credentials"),
+                                      ),
+                                    );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
+                                      const SnackBar(
                                         content: Text("Check the inputs"),
                                       ),
                                     );
@@ -249,15 +296,15 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    SizedBox(width: 90),
-                    Text("Don't have an account?"),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 90),
+                    const Text("Don't have an account?"),
+                    const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignUp()));
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) => SignUp()));
                       },
-                      child: Text(
+                      child: const Text(
                         "sign up",
                         style: TextStyle(
                             color: Color(0xff00658e),
@@ -270,5 +317,11 @@ class _LoginPageState extends State<LoginPage> {
             ]),
           ),
         ));
+  }
+
+  void init() async {
+    users = await getUsers();
+    print(users);
+    setState(() {});
   }
 }
