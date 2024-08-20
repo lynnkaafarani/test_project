@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test2/screens/sign_up.dart';
-import 'package:test2/widgets/social_icon.dart';
+import 'package:test2/constants/cst.dart';
+import 'package:test2/constants/json_fct.dart';
+
 
 import '../constants/color_constants.dart';
-import 'home_pageproject.dart';
+import 'default_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,6 +21,14 @@ class _LoginPageState extends State<LoginPage> {
   bool val = true;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  List<JsnFct> users = [];
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Image(
-                image: AssetImage('photo/logo.jpeg'),
+                image: const AssetImage('photo/logo.jpeg'),
                 width: MediaQuery.of(context).size.width,
                 height: 200,
                 fit: BoxFit.cover,
@@ -37,14 +46,15 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
-                    surfaceTintColor: Colors.white,
+                  surfaceTintColor: Colors.white,
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
-                  side: BorderSide(
-                    color: mainTextColor, // border color
-                    width: 2.0, // border thickness
-                  ),),
+                    side: BorderSide(
+                      color: mainTextColor, // border color
+                      width: 2.0, // border thickness
+                    ),
+                  ),
                   child: Form(
                     key: formKey,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -80,9 +90,8 @@ class _LoginPageState extends State<LoginPage> {
                                     color: mainTextColor,
                                   ),
                                   decoration: InputDecoration(
-                                    label: Text("Username"),
-                                    labelStyle: TextStyle(color:mainTextColor),
-
+                                    label: const Text("Username"),
+                                    labelStyle: TextStyle(color: mainTextColor),
                                     prefixIcon: Icon(
                                       Icons.person,
                                       color: mainTextColor,
@@ -93,20 +102,21 @@ class _LoginPageState extends State<LoginPage> {
                                     focusedBorder: OutlineInputBorder(
                                         borderSide:
                                             BorderSide(color: mainTextColor)),
-                                    errorBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Color(0xff0caba7))),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Color(0xff0caba7))),
-                                    errorStyle: TextStyle(color: Color(0xff0caba7)),
+                                    errorBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff0caba7))),
+                                    focusedErrorBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff0caba7))),
+                                    errorStyle:
+                                        const TextStyle(color: Color(0xff0caba7)),
                                   ),
                                 ),
                               ),
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                         Row(
@@ -129,24 +139,25 @@ class _LoginPageState extends State<LoginPage> {
                                     obscureText: eye,
                                     style: TextStyle(color: mainTextColor),
                                     decoration: InputDecoration(
-                                      prefixIcon:
-                                          Icon(Icons.lock, color:mainTextColor),
-                                      label: Text("Password"),
-                                      labelStyle: TextStyle(color:mainTextColor),
+                                      prefixIcon: Icon(Icons.lock,
+                                          color: mainTextColor),
+                                      label: const Text("Password"),
+                                      labelStyle:
+                                          TextStyle(color: mainTextColor),
                                       enabledBorder: OutlineInputBorder(
                                           borderSide:
                                               BorderSide(color: mainTextColor)),
                                       focusedBorder: OutlineInputBorder(
                                           borderSide:
-                                              BorderSide(color:mainTextColor)),
-                                      errorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Color(0xff0caba7))),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Color(0xff0caba7))),
+                                              BorderSide(color: mainTextColor)),
+                                      errorBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff0caba7))),
+                                      focusedErrorBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff0caba7))),
                                       errorStyle:
-                                          TextStyle(color: Color(0xff0caba7)),
+                                          const TextStyle(color: Color(0xff0caba7)),
                                       suffixIcon: GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -155,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye,
-                                          color: Colors.white,
+                                          color: mainTextColor,
                                         ),
                                       ),
                                     ),
@@ -163,25 +174,26 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ]),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 32.0,
-                            vertical: 8,
-                          ),
-                          child: Divider(
-                            thickness: 1,
-                            color: mainTextColor,
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(
+                        //     horizontal: 32.0,
+                        //     vertical: 8,
+                        //   ),
+                        //   child: Divider(
+                        //     thickness: 1,
+                        //     color: mainTextColor,
+                        //   ),
+                        // ),
                         Row(children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Checkbox(
                               checkColor: Colors.white,
                               focusColor: mainTextColor,
                               activeColor: mainTextColor,
-                              side: BorderSide(color: mainTextColor, width: 1.5),
+                              side:
+                                  BorderSide(color: mainTextColor, width: 1.5),
                               value: val,
                               onChanged: (value) {
                                 setState(() {
@@ -191,8 +203,8 @@ class _LoginPageState extends State<LoginPage> {
                           //SizedBox(width: 10,),
 
                           Text('Remember me ',
-                              style: TextStyle(color:mainTextColor)),
-                          SizedBox(
+                              style: TextStyle(color: mainTextColor)),
+                          const SizedBox(
                             width: 50,
                           ),
                           Text("forgot password?",
@@ -208,16 +220,36 @@ class _LoginPageState extends State<LoginPage> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(8))),
-                                child: Row(children: [
-                                  Icon(Icons.login, color:Colors.white),
-                                  Text("Log In", style: TextStyle(color:Colors.white)),
+                                child: const Row(children: [
+                                  Icon(Icons.login, color: Colors.white),
+                                  Text("Log In",
+                                      style: TextStyle(color: Colors.white)),
                                 ]),
-                                onPressed: () {Navigator.push(context,
-                                       MaterialPageRoute(builder: (context) =>HomePageproject()));
+                                onPressed: () {
                                   if (formKey.currentState!.validate()) {
+                                    for (JsnFct user in users) {
+
+                                      if (usernameController.text ==
+                                              user.email &&
+                                          passwordController.text ==
+                                              user.password) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const DefaultPage(),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                    }
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Invalid credentials"),
+                                      ),
+                                    );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
+                                      const SnackBar(
                                         content: Text("Check the inputs"),
                                       ),
                                     );
@@ -264,15 +296,15 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    SizedBox(width: 90),
-                    Text("Don't have an account?"),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 90),
+                    const Text("Don't have an account?"),
+                    const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () {
                         // Navigator.push(context,
                         //     MaterialPageRoute(builder: (context) => SignUp()));
                       },
-                      child: Text(
+                      child: const Text(
                         "sign up",
                         style: TextStyle(
                             color: Color(0xff00658e),
@@ -285,5 +317,11 @@ class _LoginPageState extends State<LoginPage> {
             ]),
           ),
         ));
+  }
+
+  void init() async {
+    users = await getUsers();
+    print(users);
+    setState(() {});
   }
 }

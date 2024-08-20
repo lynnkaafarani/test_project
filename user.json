@@ -1,0 +1,37 @@
+{
+  "users": [
+    {
+      "userId": 1,
+      "name": "Mohamad Fakih",
+      "password": "123456",
+      "address": "Jamous",
+      "phoneCode": "LB",
+      "phoneNumber": "9292922",
+      "phonePrefix": "961",
+      "birthdate": "8-5-2020",
+      "email": "mohamad@gmail.com"
+    },
+    {
+      "userId": 2,
+      "name": "Ribal Zaaiter",
+      "password": "testtest",
+      "address": "asdasd",
+      "phoneCode": "LB",
+      "phoneNumber": "9292922",
+      "phonePrefix": "961",
+      "birthdate": "8-5-2020",
+      "email": "ribal@gmail.com"
+    },
+    {
+      "userId": 3,
+      "name": "Lynn Kaafarani",
+      "password": "test123456",
+      "address": "asdazxcsww",
+      "phoneCode": "LB",
+      "phoneNumber": "124124124",
+      "phonePrefix": "961",
+      "birthdate": "8-5-2020",
+      "email": "Lynn@gmail.com"
+    }
+  ]
+}
