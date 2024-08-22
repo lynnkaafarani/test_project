@@ -9,18 +9,42 @@ class JsnFct{
   final String birthdate;
   final String email;
 
-  JsnFct(this.userId, this.name, this.password, this.address, this.phoneCode, this.phoneNumber, this.phonePrefix, this.birthdate, this.email);
+  JsnFct(
+      {required this.userId,
+      required this.name,
+      required this.password,
+        required this.address,
+        required this.phoneCode,
+        required this.phoneNumber,
+        required this.phonePrefix,
+        required this.birthdate,
+        required this.email});
   factory JsnFct.fromJson(Map<String, dynamic> json) {
     return JsnFct(
-      json['userId'] as int,
-      json['name'] as String,
-      json['password'] as String,
-      json['address'] as String,
-      json['phoneCode'] as String,
-      json['phoneNumber'] as String,
-      json['phonePrefix'] as String,
-      json['birthdate'] as String,
-      json['email'] as String,
+     userId:  json['userId'] as int,
+     name:  json['name'] as String,
+     password:  json['password'] as String,
+     address:  json['address'] as String,
+     phoneCode:  json['phoneCode'] as String,
+    phoneNumber:   json['phoneNumber'] as String,
+    phonePrefix:   json['phonePrefix'] as String,
+    birthdate:   json['birthdate'] as String,
+     email:  json['email'] as String,
     );
   }
+  // toJson method
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'name': name,
+      'password': password,
+      'address': address,
+      'phoneCode': phoneCode,
+      'phoneNumber': phoneNumber,
+      'phonePrefix': phonePrefix,
+      'birthdate': birthdate,
+      'email': email,
+    };
+  }
+
 }

@@ -10,13 +10,21 @@ Future<List<JsnFct>> getUsers() async {
   List<JsnFct> userDataList = [];
   if (jsonFile.existsSync()) {
     final jsonData = json.decode(jsonFile.readAsStringSync());
-    if (jsonData["users"] is List) {
+    if (jsonData is List) {
       userDataList =
-          jsonData["users"].map<JsnFct>((item) => JsnFct.fromJson(item)).toList();
+          jsonData.map<JsnFct>((item) => JsnFct.fromJson(item)).toList();
     }
   } else {
     print("File does not exists");
   }
   print(userDataList);
   return userDataList;
+}
+Future updateUsers(List<JsnFct> users) async {
+  final tempDir = await getApplicationDocumentsDirectory();
+  String _embPath = '${tempDir.path}/user.json';
+  final jsonFile = File(_embPath);
+  jsonFile.writeAsStringSync(
+    json.encode(users),
+  );
 }

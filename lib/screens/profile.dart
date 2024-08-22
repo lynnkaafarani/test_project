@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/phone_number.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test2/constants/color_constants.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl/intl.dart';
+import 'package:test2/constants/login-class.dart';
+import 'package:test2/constants/other_constants.dart';
 
-import 'login_page.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -17,10 +21,26 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController usernameController = TextEditingController();
-  final TextEditingController adressController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   List<DateTime?> _dates = [DateTime.now()];
-  PhoneNumber _phoneNumber = PhoneNumber(countryISOCode: "", countryCode: "", number: "");
-  Country _country = Country(name: "Lebanon", flag: "LB", code: "LB", dialCode: "+961", nameTranslations: {}, minLength: 0, maxLength: 0);
+  PhoneNumber _phoneNumber =
+      PhoneNumber(countryISOCode: "", countryCode: "", number: "");
+  Country _country = Country(
+      name: "Lebanon",
+      flag: "LB",
+      code: "LB",
+      dialCode: "+961",
+      nameTranslations: {},
+      minLength: 0,
+      maxLength: 0);
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -41,14 +61,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 Column(
                   children: [
                     Text(
-                      "Username",
+                      userResponse.userProfile.fullName,
                       style: TextStyle(
                           color: mainTextColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 24),
+                          fontSize: 20),
                     ),
                     Text(
-                      "name@mrad.lb",
+                      userResponse.userProfile.email,
                       style: TextStyle(color: mainTextColor),
                     ),
                   ],
@@ -90,7 +110,9 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: IntlPhoneField(disableLengthCheck: true,
+                    child: IntlPhoneField(
+                      controller: phoneController,
+                      disableLengthCheck: true,
                       decoration: InputDecoration(
                         labelText: 'Phone Number',
                         labelStyle: TextStyle(color: mainTextColor),
@@ -104,16 +126,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           borderSide: BorderSide(color: green),
                         ),
                       ),
-                      initialCountryCode: _country.code,
-                    onCountryChanged: (country){
-                      setState(() {
-                        _country=country;
-                      });
-                    },
+                      initialCountryCode: dialCodeToCountryCode(
+                          userResponse.userProfile.phoneInfo.code),
+                      onCountryChanged: (country) {
+                        setState(() {
+                          _country = country;
+                        });
+                      },
                       onChanged: (phone) {
-                      setState(() {
-                        _phoneNumber=phone;
-                      });
+                        setState(() {
+                          _phoneNumber = phone;
+                        });
                         print(phone.completeNumber);
                       },
                     ),
@@ -127,12 +150,12 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextFormField(
-                controller: adressController,
+                controller: addressController,
                 style: TextStyle(
                   color: mainTextColor,
                 ),
                 decoration: InputDecoration(
-                  label: Text("Adress"),
+                  label: Text("Address"),
                   labelStyle: TextStyle(color: mainTextColor),
                   enabledBorder:
                       OutlineInputBorder(borderSide: BorderSide(color: green)),
@@ -144,24 +167,24 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Padding(
             padding: const EdgeInsets.all(18.0),
-            child: GestureDetector(onTap: () async {
-              List<DateTime?>? results =
-              await showCalendarDatePicker2Dialog(
-                context: context,
-                config: CalendarDatePicker2WithActionButtonsConfig(
-                    calendarType: CalendarDatePicker2Type.single),
-                dialogSize: const Size(325, 400),
-                value: _dates,
-                borderRadius: BorderRadius.circular(15),
-              );
-              if(results!.isNotEmpty){
-                setState(() {
-                  _dates = results;
-                });
-              }
+            child: GestureDetector(
+              onTap: () async {
+                List<DateTime?>? results = await showCalendarDatePicker2Dialog(
+                  context: context,
+                  config: CalendarDatePicker2WithActionButtonsConfig(
+                      calendarType: CalendarDatePicker2Type.single),
+                  dialogSize: const Size(325, 400),
+                  value: _dates,
+                  borderRadius: BorderRadius.circular(15),
+                );
+                if (results!.isNotEmpty) {
+                  setState(() {
+                    _dates = results;
+                  });
+                }
 
-              print(results);
-            },
+                print(results);
+              },
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -176,9 +199,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.all(14.0),
                       child: Icon(Icons.cake, color: mainTextColor),
                     ),
-                    Text(
-                      DateFormat("yyyy-MM-dd").format(_dates[0]!),style:TextStyle(color:mainTextColor)
-                    ),
+                    Text(DateFormat("yyyy-MM-dd").format(_dates[0]!),
+                        style: TextStyle(color: mainTextColor)),
                   ],
                 ),
               ),
@@ -194,17 +216,60 @@ class _ProfilePageState extends State<ProfilePage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8))),
                   child: Row(children: [
-                    Icon(Icons.logout, color: Colors.white),
-                    Text("Log Out", style: TextStyle(color: Colors.white)),
+                    Icon(Icons.update, color: Colors.white),
+                    Center(
+                      child: Text(
+                        "Update",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ]),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                    userResponse.userProfile.fullName = usernameController.text;
+                    userResponse.userProfile.phoneInfo.number =
+                        phoneController.text;
+                    userResponse.userProfile.address[0] =
+                        addressController.text;
+                    userResponse.userProfile.phoneInfo.code = _country.dialCode;
+                    setState(() {});
+                    save(userResponse);
                   }),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void init() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? userPrefsJson = prefs.getString('userResponse');
+
+    Map<String, dynamic> userPrefsMap = json.decode(userPrefsJson!);
+
+    print(userPrefsMap);
+    final UserResponse userResponse = UserResponse.fromJson(userPrefsMap);
+
+    usernameController.text = userResponse.userProfile.fullName;
+    print(usernameController.text);
+    addressController.text = userResponse.userProfile.address[0];
+    phoneController.text = userResponse.userProfile.phoneInfo.number;
+    final List<String> dateSplit =
+        userResponse.userProfile.birthDate.split('-');
+    _dates[0] = DateTime(
+      int.parse(dateSplit[0]),
+      int.parse(dateSplit[1]),
+      int.parse(
+        dateSplit[2],
+      ),
+    );
+    setState(() {});
+  }
+
+  void save(UserResponse userResponse) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userPrefsJson = json.encode(userResponse.toJson());
+    await prefs.setString('userResponse', userPrefsJson);
   }
 }
