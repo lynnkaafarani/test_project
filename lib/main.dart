@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test2/screens/default_page.dart';
 
 import 'package:test2/screens/login_page.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Retrieve the login status with the correct key
+  final bool isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
+
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key, required this.isLoggedIn});
+  final bool isLoggedIn;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -20,7 +30,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home:isLoggedIn? DefaultPage(): LoginPage(),
     );
   }
 }
