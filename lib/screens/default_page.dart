@@ -10,7 +10,6 @@ import 'package:test2/screens/settings.dart';
 import 'package:test2/widgets/drawer_item.dart';
 
 import '../constants/other_constants.dart';
-import 'api-cars.dart';
 
 class DefaultPage extends StatefulWidget {
   const DefaultPage({super.key});
@@ -18,26 +17,21 @@ class DefaultPage extends StatefulWidget {
   @override
   State<DefaultPage> createState() => _State();
 }
+
 ///
 class _State extends State<DefaultPage> {
   List<Widget> screens = [
-    AbousUs(),
-    ProfilePage(),
-    SettingsPage(),
-    ApiCars(),
   ];
-  List<String> titles = [
-    "Home",
-    "Profile",
-    "Settings",
-    "Api "
-  ];
+
+List<IconData> icon=[];
   ValueNotifier<int> selectedPage = ValueNotifier(0);
+
   @override
   void initState() {
     super.initState();
     init();
   }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -49,7 +43,7 @@ class _State extends State<DefaultPage> {
               iconTheme: IconThemeData(color: Colors.white),
               backgroundColor: mainTextColor,
               title: Text(
-                titles[selectedPage.value],
+                userResponse.userMenu[selectedPage.value].desc,
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -63,9 +57,8 @@ class _State extends State<DefaultPage> {
                     width: 85,
                     fit: BoxFit.fill,
                   ),
-
                 ),
-                SizedBox(width:24)
+                SizedBox(width: 24)
               ],
             ),
             drawer: Drawer(
@@ -81,48 +74,62 @@ class _State extends State<DefaultPage> {
                       width: 240,
                       height: 140,
                     ),
-                    Text(userResponse.userProfile.fullName,style: TextStyle(color: mainTextColor,fontWeight: FontWeight.bold,fontSize: 24),),
-                    SizedBox(width: 24,),
+                    Text(
+                      userResponse.userProfile.fullName,
+                      style: TextStyle(
+                          color: mainTextColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
+                    ),
+                    SizedBox(
+                      width: 24,
+                    ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 34,right: 34, bottom: 24),
-                      child: Divider(thickness:1,),
+                      padding: const EdgeInsets.only(
+                          left: 34, right: 34, bottom: 24),
+                      child: Divider(
+                        thickness: 1,
+                      ),
                     ),
-                    DrawerItem(
-                      icon: Icons.home,
-                      title: "Home",
-                      selectedItem: selectedPage,
-                      currentIndex: 0,
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: userResponse.userMenu.length,
+                          itemBuilder: (context, index) {
+                            return DrawerItem(
+                                title: userResponse.userMenu[index].desc,
+                                icon: icon[index],
+                                selectedItem: selectedPage,
+                                currentIndex: index);
+                          }),
                     ),
-                    DrawerItem(
-                      icon: Icons.person,
-                      title: "Profile",
-                      selectedItem: selectedPage,
-                      currentIndex: 1,
-                    ),
-                    DrawerItem(
-                      icon: Icons.settings,
-                      title: "Settings",
-                      selectedItem: selectedPage,
-                      currentIndex: 2,
-                    ),DrawerItem(
-                      icon: Icons.api,
-                      title: "Api",
-                      selectedItem: selectedPage,
-                      currentIndex: 3,
-                    ),
-                    ],
-                )
-            ),
+                  ],
+                )),
             body: screens[selectedPage.value],
           );
         });
   }
 
-  void init()async {
+  void init() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     final data = sp.getString("userResponse") ?? "{}";
     final decodedData = jsonDecode(data);
-     userResponse = UserResponse.fromJson(decodedData);
-  }
+    userResponse = UserResponse.fromJson(decodedData);
 
+    for(UserMenu menu in userResponse.userMenu){
+      if(menu.id=="1"){
+        screens.add(ProfilePage());
+        icon.add(Icons.person);
+
+      }else if(menu.id=="2"){
+        screens.add(AbousUs());
+        icon.add(Icons.home);
+      }else if(menu.id=="3"){
+        screens.add(SettingsPage());
+        icon.add(Icons.settings);
+      }
+    }
+    setState(() {
+
+    });
+  }
 }
