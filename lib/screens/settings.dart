@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test2/constants/other_constants.dart';
+import 'package:test2/provider/user_provider.dart';
 
 import '../constants/color_constants.dart';
 import 'Faq.dart';
@@ -15,7 +15,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool isSwitched = userResponse.userPrefs.notification;
+  bool isSwitched = false;
   bool lgswitch = false;
   String selectedLanguage = 'English'; // Default selected language
   final List<String> languages = [
@@ -27,7 +27,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -45,7 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   color: Colors.white70,
                   child: Padding(
                     padding:
-                    const EdgeInsets.only(bottom: 18, top: 18, left: 10),
+                        const EdgeInsets.only(bottom: 18, top: 18, left: 10),
                     child: Row(
                       children: [
                         Icon(
@@ -56,7 +55,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
                             "Notification",
-                            style: TextStyle(color: mainTextColor, fontSize: 20),
+                            style:
+                                TextStyle(color: mainTextColor, fontSize: 20),
                           ),
                         ),
                         SizedBox(width: 85),
@@ -69,8 +69,15 @@ class _SettingsPageState extends State<SettingsPage> {
                             setState(() {
                               isSwitched = value;
                             });
-                            SharedPreferences prefs = await SharedPreferences.getInstance();
-                            prefs.setBool("switchVal", userResponse.userPrefs.notification);
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setBool(
+                                "switchVal",
+                                Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .userResponse
+                                    .userPrefs
+                                    .notification);
                           },
                         ),
                         Text(isSwitched ? "ON" : "OFF",
@@ -109,20 +116,28 @@ class _SettingsPageState extends State<SettingsPage> {
                       DropdownButton<String>(
                         dropdownColor: Colors.white,
                         value: selectedLanguage,
-                        icon: Icon(Icons.arrow_drop_down, color:mainTextColor),
+                        icon: Icon(Icons.arrow_drop_down, color: mainTextColor),
                         onChanged: (String? newValue) async {
                           setState(() {
                             selectedLanguage = newValue!;
-                          });SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.setString("selectedLanguage",userResponse.userPrefs.language );
+                          });
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.setString(
+                              "selectedLanguage",
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .userResponse
+                                  .userPrefs
+                                  .language);
 
                           // You can save the selected language using SharedPreferences here
-
                         },
-                        items: languages.map<DropdownMenuItem<String>>((String value) {
+                        items: languages
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value,style:TextStyle(color:mainTextColor)),
+                            child: Text(value,
+                                style: TextStyle(color: mainTextColor)),
                           );
                         }).toList(),
                       ),
@@ -150,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   color: Colors.white70,
                   child: Padding(
                     padding:
-                    const EdgeInsets.only(bottom: 18, top: 18, left: 10),
+                        const EdgeInsets.only(bottom: 18, top: 18, left: 10),
                     child: Row(children: [
                       Icon(
                         Icons.question_answer,
@@ -192,7 +207,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   );
                   SharedPreferences prefs =
-                  await SharedPreferences.getInstance();
+                      await SharedPreferences.getInstance();
                   prefs.setBool("isLoggedIn", false);
                 }),
           ),
@@ -213,14 +228,15 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {
       lgswitch = prefs.getBool("newVal") ?? false;
     });
-  } Future<void> initlang() async {
+  }
+
+  Future<void> initlang() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
       isSwitched = prefs.getBool("switchVal") ?? false;
-      selectedLanguage = prefs.getString("selectedLanguage") ?? 'English'; // Load saved language or default to English
+      selectedLanguage = prefs.getString("selectedLanguage") ??
+          'English'; // Load saved language or default to English
     });
   }
-
 }
-

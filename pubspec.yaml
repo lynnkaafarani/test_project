@@ -42,6 +42,7 @@ dependencies:
   intl:
   http:
   path_provider:
+  provider:
 dev_dependencies:
   flutter_test:
     sdk: flutter

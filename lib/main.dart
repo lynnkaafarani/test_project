@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test2/provider/user_provider.dart';
 import 'package:test2/screens/default_page.dart';
 
 import 'package:test2/screens/login_page.dart';
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider(create: (_)=>UserProvider(),child: MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -31,6 +33,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home:isLoggedIn? DefaultPage(): LoginPage(),
-    );
+    ),);
   }
 }
