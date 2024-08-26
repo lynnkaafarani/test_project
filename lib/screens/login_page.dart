@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:test2/constants/cst.dart';
 import 'package:test2/constants/json_fct.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test2/constants/login-class.dart';
 import 'package:test2/constants/loginfct.dart';
+import 'package:test2/provider/user_provider.dart';
 
 import '../constants/color_constants.dart';
-import '../constants/other_constants.dart';
 import 'default_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   bool eye = true;
   bool val = true;
-  bool _isLoggedIn = false;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   List<JsnFct> users = [];
@@ -50,10 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Image(
                         image: const AssetImage('photo/logo.jpeg'),
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         height: 200,
                         fit: BoxFit.cover,
                       ),
@@ -72,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Form(
                             key: formKey,
                             autovalidateMode:
-                            AutovalidateMode.onUserInteraction,
+                                AutovalidateMode.onUserInteraction,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -89,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Expanded(
                                       child: Padding(
@@ -109,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                                           decoration: InputDecoration(
                                             label: const Text("Username"),
                                             labelStyle:
-                                            TextStyle(color: mainTextColor),
+                                                TextStyle(color: mainTextColor),
                                             prefixIcon: Icon(
                                               Icons.person,
                                               color: mainTextColor,
@@ -121,15 +118,15 @@ class _LoginPageState extends State<LoginPage> {
                                                 borderSide: BorderSide(
                                                     color: mainTextColor)),
                                             errorBorder:
-                                            const OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color:
-                                                    Color(0xff0caba7))),
+                                                const OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            Color(0xff0caba7))),
                                             focusedErrorBorder:
-                                            const OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color:
-                                                    Color(0xff0caba7))),
+                                                const OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            Color(0xff0caba7))),
                                             errorStyle: const TextStyle(
                                                 color: Color(0xff0caba7)),
                                           ),
@@ -143,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Expanded(
                                         child: Padding(
@@ -154,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   .text.isEmpty) {
                                                 return "Empty fields";
                                               } else if (passwordController
-                                                  .text.length <
+                                                      .text.length <
                                                   7) {
                                                 return "weak password";
                                               }
@@ -162,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                             controller: passwordController,
                                             obscureText: eye,
                                             style:
-                                            TextStyle(color: mainTextColor),
+                                                TextStyle(color: mainTextColor),
                                             decoration: InputDecoration(
                                               prefixIcon: Icon(Icons.lock,
                                                   color: mainTextColor),
@@ -176,15 +173,15 @@ class _LoginPageState extends State<LoginPage> {
                                                   borderSide: BorderSide(
                                                       color: mainTextColor)),
                                               errorBorder:
-                                              const OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Color(
-                                                          0xff0caba7))),
+                                                  const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Color(
+                                                              0xff0caba7))),
                                               focusedErrorBorder:
-                                              const OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Color(
-                                                          0xff0caba7))),
+                                                  const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Color(
+                                                              0xff0caba7))),
                                               errorStyle: const TextStyle(
                                                   color: Color(0xff0caba7)),
                                               suffixIcon: GestureDetector(
@@ -217,7 +214,6 @@ class _LoginPageState extends State<LoginPage> {
                                       onChanged: (value) {
                                         setState(() {
                                           val = value ?? false;
-
                                         });
                                       }),
                                   //SizedBox(width: 10,),
@@ -239,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                                             backgroundColor: mainTextColor,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(8))),
+                                                    BorderRadius.circular(8))),
                                         child: const Row(children: [
                                           Icon(Icons.login,
                                               color: Colors.white),
@@ -254,10 +250,12 @@ class _LoginPageState extends State<LoginPage> {
                                               isLoading = true;
                                             });
                                             try {
-                                              userResponse = await login(
-                                                  usernameController.text,
-
-                                                  passwordController.text);
+                                              Provider.of<UserProvider>(context,
+                                                          listen: false)
+                                                      .userResponse =
+                                                  await login(
+                                                      usernameController.text,
+                                                      passwordController.text);
                                             } catch (e) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -274,13 +272,23 @@ class _LoginPageState extends State<LoginPage> {
                                               isLoading = false;
                                             });
 
-                                            if (userResponse.userMenu.isNotEmpty) {
-                                              saveData(userResponse,val);
+                                            if (Provider.of<UserProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .userResponse
+                                                .userMenu
+                                                .isNotEmpty) {
+                                              saveData(
+                                                  Provider.of<UserProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .userResponse,
+                                                  val);
                                               Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                  const DefaultPage(),
+                                                      const DefaultPage(),
                                                 ),
                                               );
                                             }
@@ -289,7 +297,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 .showSnackBar(
                                               const SnackBar(
                                                 content:
-                                                Text("Check the inputs"),
+                                                    Text("Check the inputs"),
                                               ),
                                             );
                                           }
@@ -326,10 +334,13 @@ class _LoginPageState extends State<LoginPage> {
                     ]),
               ),
             ),
-            if(isLoading)
+            if (isLoading)
               Container(
                 color: Colors.black.withOpacity(0.5),
-                child: Center(child: CircularProgressIndicator(),),)
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
           ],
         ));
   }
@@ -340,12 +351,10 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {});
   }
 
-  void saveData(UserResponse userResponse,val) async {
-
+  void saveData(UserResponse userResponse, val) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userPrefsJson = json.encode(userResponse.toJson());
     await prefs.setString('userResponse', userPrefsJson);
-    prefs.setBool("isLoggedIn",val);
-
+    prefs.setBool("isLoggedIn", val);
   }
 }
